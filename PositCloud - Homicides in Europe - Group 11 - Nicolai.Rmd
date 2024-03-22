@@ -1,0 +1,85 @@
+---
+title: "Homicides in Europe - Group 11"
+output:
+  html_document: default
+  pdf_document: default
+date: "2024-03-22"
+---
+
+```{r setup, include=FALSE}
+knitr::opts_chunk$set(echo = TRUE)
+```
+
+# TASK A
+
+kings \<- read_csv("data/Danske_konger_Gruppe11.csv") names(kings)
+
+kings %\>% mutate(duration = `Slut paa regerings tid` - `Start paa regerings tid`) %\>% mutate(midyear = `Start paa regerings tid` - duration/2) %\>% ggplot(aes(x = midyear, y = duration)) + geom_point()+ geom_smooth()
+
+```{}
+```
+
+# Task B
+
+## Loading data
+
+```{r}
+library(tidyverse)
+```
+
+```{r}
+Western_Europe <- read_csv("data/homicide-rates-across-western-europe.csv")
+```
+
+Checking the data:
+
+```{r}
+head(Western_Europe)
+```
+
+Renaming "Homicide rate in Europe over long-term (per 100,000)" to "homicides_per_100k"
+
+```{r}
+names(Western_Europe)[4] <- "homicides_per_100k"
+```
+
+## Seeing the long-term trend in homicides
+
+```{r}
+Western_Europe %>% 
+  ggplot(aes(x = Year, y = homicides_per_100k, color = Entity)) + 
+  geom_line()
+```
+
+```{r}
+eval(Western_Europe)
+```
+
+## Making it easier to see
+
+```{r}
+Western_Europe %>% 
+  ggplot(aes(x = Year, y = homicides_per_100k, color = Entity)) + 
+  geom_bar(stat = "identity", position = "dodge") +
+  labs(title="Homicides in Europe",
+       x = "Year", 
+       y = "homicides_per_100k") + 
+  facet_wrap(~ Entity)
+```
+
+## Now we have a look at our Danish Rulers Data Set
+
+```{r}
+library(readr)
+Danske_konger_Gruppe11 <- read_csv("data/Danske_konger_Gruppe11.csv")
+```
+
+## Plotting the data
+
+```{r}
+Danske_konger_Gruppe11 %>% 
+  mutate(duration = `Slut paa regerings tid` - `Start paa regerings tid`) %>% 
+  mutate(midyear = `Start paa regerings tid` - duration/2) %>% 
+  ggplot(aes(x = midyear, y = duration)) + 
+  geom_smooth()
+```
